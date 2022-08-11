@@ -39,4 +39,27 @@ class MainController extends Controller
 
     return view('welcome', compact('cars'));
   }
+  public function filter(Request $request)
+  {
+    $engine = substr($request->engine, strpos($request->engine, "=") + 1, strlen($request->engine));
+    $wheel = substr($request->wheel, strpos($request->wheel, "=") + 1, strlen($request->wheel));
+    $cars=DB::table('cars')->when(
+      $engine != 'all',
+      function ($query) use ($engine) {
+
+        $query->where('enginetype', $engine);
+      })
+      ->when(
+        $wheel != 'all',
+          function ($query) use ($wheel) {
+
+            $query->where('drive', $wheel);
+          }
+      )->get();
+      if ($request->ajax()) {
+        return $cars;
+      }
+      return view('welcome', compact('cars'));
+    
+  }
 }

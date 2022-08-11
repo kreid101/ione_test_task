@@ -18,3 +18,4 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::get('/catalog/{brand}/{model}/{engine?}/{wheel?}',[MainController::class,'show']);
+Route::get('{engine}/{wheel}',[MainController::class,'filter']);
